@@ -1,0 +1,35 @@
+.main {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	top: 7vh;
+	height: 300vh;
+	width: 100vw;
+}
+.header {
+	position: fixed;
+	background: green;
+	height: 7vh;
+	width: 100vw;
+	z-index: 100
+}
+.page {
+	display: flex;
+	height: 93vh;
+}
+
+.element {
+  background-image: radial-gradient(#09ff00, red);
+}
+
+
+@font-face {
+	font-family: "Yulong";  
+	src: url("./fonts/YulongItalic.ttf") format("truetype"); 
+	font-style: normal; 
+	font-weight: normal;
+ }
+@keyframes typing { 
+	from { width: 0 } 
+	to { width: 100% } 
+}
