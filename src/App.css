@@ -2,8 +2,7 @@
 	position: absolute;
 	display: flex;
 	flex-direction: column;
-	top: 7vh;
-	height: 300vh;
+	height: 100vh;
 	width: 100vw;
 }
 .header {
@@ -15,11 +14,19 @@
 }
 .page {
 	display: flex;
-	height: 93vh;
+	height: 100vh;
 }
 
-.element {
-  background-image: radial-gradient(#09ff00, red);
+div#fly > a{
+	display: inline;
+}
+a{
+	color: white;
+	text-decoration: none;
+}
+body {
+    height: 100vh;
+    overflow: hidden;
 }
 
 

@@ -1,18 +1,15 @@
 import './App.css';
 import img1 from './img/earth.jpg';
-import icon1 from './img/star.png';
-import icon1_gif from './img/star.gif';
-import icon2 from './img/folder.png';
-import icon2_gif from './img/folder.gif';
-import icon3 from './img/note.png';
-import icon3_gif from './img/note.gif';
+import man from './img/man.png';
 import React, {Component} from 'react'
+import Button from './button.js';
+
 //transparent
 //<a target="_blank" href="https://icons8.com/icon/lWQbgdTdErdB/note">Note</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 //<a target="_blank" href="https://icons8.com/icon/bSBJ7165l9Vr/star">Star</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 //<a target="_blank" href="https://icons8.com/icon/JHFYPQIPcXti/folder">Folder</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
-export default class ButtonTap extends Component{
+export default class MainPage extends Component{
 	constructor (props) {
 		super(props)
 		this.state = {
@@ -45,6 +42,7 @@ export default class ButtonTap extends Component{
 					this.setState({
 						index : this.state.index+=1
 					});
+					if (this.state.article[this.state.index] ==" ") {this.setState({index : this.state.index+=1})};
 					if (this.state.index >= this.state.article.length){
 					this.setState({index : 0})
 					};
@@ -58,9 +56,12 @@ export default class ButtonTap extends Component{
 					if (document.getElementById("left").style.left <= 0 +  "vw"){
 						this.setState({ wait: this.state.wait+0.5 });
 						document.getElementById("left").style.left = (-40 + this.state.wait) + "vw";
+						document.getElementById("right").style.right = (-40 + this.state.wait) + "vw";
 					} else{ 
 						clearInterval(this.state.left);
 						this.state.writer();
+						this.state.plane("horizontal");
+						this.state.plane("vertical");
 						
 					}
 				}, 5	);	
@@ -68,15 +69,34 @@ export default class ButtonTap extends Component{
 			},
 			flow_right: () => {
 			},
-			list: [icon1, icon1_gif, "", icon2, icon2_gif, "", icon3, icon3_gif, ""],
-			list_on: (a) => {
-				document.getElementById("icon" + a.toString()).src = this.state.list[(a*3)-2]
-				document.getElementById("icon" + a.toString()).style.height = 5 + "vh"
-				document.getElementById("icon" + a.toString()).style.top = 1.3+ "vh"
+			plane: (direction) => {
+				let plane_count = [0, 1]
+				const plane_process = setInterval(() => {
+					plane_count[0] += 1*plane_count[1]
+					if (direction == "horizontal"){
+						if (Math.abs(plane_count[0]) == 25) {plane_count[1] = -plane_count[1]}
+						document.getElementById("left").style.paddingLeft = ((7 -(0.008*plane_count[0])) + "vw")
+					}else{
+						if (Math.abs(plane_count[0]) == 20) {plane_count[1] = -plane_count[1]}
+						document.getElementById("left").style.paddingTop = ((7 -(0.008*plane_count[0])) + "vh")
+					}
+				}, 50);	
+				this.setState({ plane_process });
 			},
-			list_out: (a) => {
-				document.getElementById("icon" + a.toString()).src = this.state.list[(a*3)-3]
-				document.getElementById("icon" + a.toString()).style.height = 4 + "vh"
+			
+			list: ["/a", "Сеть Awz", "/a", "Проекты", "/a", "О создателях"],
+			list_button: [],
+			create_buttons: () => {
+				for (let i = 1; i < this.state.list.length/2 + 1; i++) { 
+					this.state.list_button.push(<Button 
+						key={i} 
+						icon = {"icon" + i.toString()}
+						href = {this.state.list[i*2-2]}
+						label = {this.state.list[i*2-1]}
+						/>);
+					
+					//src={require('./images/bumper1.png')}
+				}	
 			},
 		};
 	}
@@ -97,6 +117,7 @@ export default class ButtonTap extends Component{
 						this.setState({ wait: 0 });
 						this.state.flow_left();
 						this.state.flow_right();
+						this.state.create_buttons();
 					}
 				}
 			}, 5	);	
@@ -106,33 +127,22 @@ export default class ButtonTap extends Component{
 	render() {
 		return(
 			<div>
-				<img style= {{position: "absolute", zIndex: "-1", top: "0", width: "100vw", height: "93vh"}} src={img1} alt = {"a"}/>				{/* Задний фон */}
+				<img style= {{position: "absolute", zIndex: "-1", width: "100vw", height: "100vh"}} src={img1} alt = {"a"}/>				{/* Задний фон */}
 				<div style= {{width: "100vw",position: "absolute", display:"flex", justifyContent: "center"}}> 												{/* Взрыв */}
 					<div id="exp" style= {{position: "fixed", opacity: "1", borderRadius: "40%", backgroundImage: "radial-gradient(white, white, white,#000072, transparent,transparent, transparent)"}}></div>
 				</div>
+				<img id="right" style= {{position: "absolute", right: "-40vw", top: "10vh",width: "40vw", height: "60vh"}}  src={man}  alt = {"a"}/>
 				<div id="left" style= {{position: "relative", left: "-40vw", paddingLeft: "7vw", paddingTop: "7vh", display: "flex", flexDirection: "column", width: "30vw", height: "92vh"}} >	{/*  Половинка */}
 					<div style= {{position: "absolute",  opacity: ".3", border: "12vw solid transparent", borderLeft: "35vh solid green", borderTop: "50vh solid green", }}></div>	{/*  Зеленушка */}
 					<div style= {{ zIndex: "1", height: "3vh",  display: "flex", justifyContent: "center", marginBottom: "2vw"}}>	{/* Заголовок */}
-						<b style= {{fontFamily: "Yulong", fontSize: "60px",color: "white"}}>Werzant {this.props.cookie}</b>
+						<b style= {{fontFamily: "Yulong", fontSize: "60px",color: "white"}}>Werzant</b>
 					</div>
 					<div style= {{ fontFamily: "Yulong", zIndex: "1",   display: "flex", marginLeft: "2vw", flexDirection: "column"}}> {/* Всё под заголовком */}
 						<div style= {{overflow: "hidden",position: "relative",  width: "24vw", height: "7vh"}}>
 							<h2 id="writer" style= {{position: "absolute",marginTop: "2px",color: "white"}}>{ this.state.article.slice(0,this.state.index)}</h2>  {/* Писатель */}
 						</div>
-						<ul style= {{ listStyleType: "none",marginLeft: "2vw", position: "relative", top: "-5vh", height: "43vh", fontSize: "3vh",color: "white", display: "flex", flexDirection: "column", justifyContent: "space-evenly",}}>
-							<li style= {{width: "10vw", height: "5vh",}} onMouseEnter={() => this.state.list_on(1)} onMouseLeave={() => this.state.list_out(1)}>
-								<img id = "icon1" style= {{position: "relative",top: "0.5vw",height: "4vh", width: "2vw"}} src={icon1}/>
-								<span>&nbsp;</span>  Сеть Awz
-							</li>
-							<li style= {{width: "10vw", height: "5vh",}} onMouseEnter={() => this.state.list_on(2)} onMouseLeave={() => this.state.list_out(2)}>
-								<img id = "icon2" style= {{position: "relative",top: "0.5vw",height: "4vh", width: "2vw"}} src={icon2}/>
-								<span>&nbsp;</span>  <a style={{ color: "white", textDecoration: "none"}} href="a">Проекты</a>
-							</li>
-							<li style= {{width: "10vw", height: "5vh",}} onMouseEnter={() => this.state.list_on(3)} onMouseLeave={() => this.state.list_out(3)}>
-								<img id = "icon3" style= {{position: "relative",top: "0.5vw",height: "4vh", width: "2vw"}} src={icon3}/>
-								<span>&nbsp;</span>  О создателях
-							</li>
-						</ul>
+						{/* Кнопки */}
+						<tbody style= {{ listStyleType: "none",marginLeft: "2vw", position: "relative", top: "0vh", height: "43vh", fontSize: "3vh",color: "white", display: "flex", flexDirection: "column", justifyContent: "space-evenly",}}>{this.state.list_button}</tbody>
 					</div>
 				</div>
 			</div>
